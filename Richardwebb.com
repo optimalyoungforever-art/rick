@@ -1,5 +1,5 @@
 # 👋 Hi, I'm Richard
-
+<img src="profile.jpg" alt="Richard">
 Welcome to my professional portfolio repository.
 
 ## 🌐 Live Website
