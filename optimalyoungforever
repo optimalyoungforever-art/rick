@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richard | Portfolio</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#0f172a;color:white;text-align:center;}
+nav{background:#111;padding:20px;}
+nav h1{color:#38bdf8;}
+.hero{padding:60px 20px;}
+.hero img{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid #38bdf8;
+    margin-bottom:20px;
+}
+.hero h2{font-size:32px;margin-bottom:10px;}
+.hero p{opacity:0.8;margin-bottom:20px;}
+section{padding:40px 20px;background:#1e293b;margin-top:20px;}
+footer{padding:20px;background:#111;margin-top:20px;}
+a{color:#38bdf8;text-decoration:none;}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <h1>Richard Portfolio</h1>
+</nav>
+
+<div class="hero">
+    <img src="profile.jpg" alt="Richard">
+    <h2>Hi, I'm Richard 👋</h2>
+    <p>Web Developer | Creative Thinker | Problem Solver</p>
+</div>
+
+<section>
+    <h2>About Me</h2>
+    <p>I build modern, responsive and professional websites.</p>
+</section>
+
+<section>
+    <h2>Contact</h2>
+    <p>Email: optimalyoungforever@gmail.com</p>
+</section>
+
+<footer>
+    © 2026 Richard | Hosted Free on GitHub Pages
+</footer>
+
+</body>
+</html>
