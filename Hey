@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Richard Portfolio</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+}
+img{
+  width:180px;
+  border-radius:50%;
+  margin-top:40px;
+}
+h1{margin-top:20px;}
+a{
+  display:inline-block;
+  margin-top:20px;
+  padding:10px 20px;
+  background:#38bdf8;
+  color:#0f172a;
+  text-decoration:none;
+  border-radius:25px;
+}
+</style>
+</head>
+<body>
+
+<img src="profile.jpg" alt="Richard">
+<h1>Hi, I'm Richard 👋</h1>
+<p>Welcome to my portfolio website.</p>
+
+<a href="mailto:optimalyoungforever@gmail.com">Contact Me</a>
+
+</body>
+</html>
