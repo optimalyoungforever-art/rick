@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Welcome Page">
+<title>Welcome</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.container {
+    max-width: 500px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: clamp(50px, 8vw, 80px);
+    color: #38bdf8;
+}
+
+p {
+    margin: 20px 0;
+    opacity: 0.85;
+    font-size: 18px;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #38bdf8;
+    color: #0f172a;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    background: white;
+    transform: translateY(-3px);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Welcome</h1>
+    <p>Your page is working successfully 🎉</p>
+    <a href="https://optimalyoungforever-art.github.io/rick/">
+        Enter Site
+    </a>
+</div>
+</body>
+</html>
