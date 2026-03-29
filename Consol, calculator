@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern Calculator</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        
+        .calculator {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        h2 { text-align: center; color: #333; margin-bottom: 1.5rem; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1.5px solid #d1d8e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover { background-color: #0056b3; }
+        .clear-btn { background-color: #6c757d; margin-top: 5px; }
+        .clear-btn:hover { background-color: #5a6268; }
+
+        #result-display {
+            margin-top: 1.5rem;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3436;
+            border: 1px dashed #ced4da;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <h2>Calculator</h2>
+    <input type="number" id="n1" placeholder="First Number" step="any">
+    <select id="op">
+        <option value="+">Add (+)</option>
+        <option value="-">Subtract (-)</option>
+        <option value="*">Multiply (*)</option>
+        <option value="/">Divide (/)</option>
+    </select>
+    <input type="number" id="n2" placeholder="Second Number" step="any">
+    
+    <button onclick="calculate()">Calculate</button>
+    <button class="clear-btn" onclick="clearAll()">Clear</button>
+
+    <div id="result-display">Result: --</div>
+</div>
+
+<script>
+    function calculate() {
+        // 1. Grab values
+        const val1 = document.getElementById('n1').value;
+        const val2 = document.getElementById('n2').value;
+        const operator = document.getElementById('op').value;
+        const display = document.getElementById('result-display');
+
+        // 2. Validation: Check if inputs are empty
+        if (val1 === "" || val2 === "") {
+            display.innerText = "⚠️ Enter both numbers";
+            display.style.color = "#d63031";
+            return;
+        }
+
+        const num1 = parseFloat(val1);
+        const num2 = parseFloat(val2);
+        let finalResult = 0;
+
+        // 3. Logic
+        switch (operator) {
+            case '+': finalResult = num1 + num2; break;
+            case '-': finalResult = num1 - num2; break;
+            case '*': finalResult = num1 * num2; break;
+            case '/': 
+                finalResult = (num2 !== 0) ? (num1 / num2) : "Divide by Zero Error";
+                break;
+            default: finalResult = "Unknown Error";
+        }
+
+        // 4. Output
+        display.innerText = "Result: " + (typeof finalResult === 'number' ? finalResult.toLocaleString() : finalResult);
+        display.style.color = "#2d3436";
+    }
+
+    function clearAll() {
+        document.getElementById('n1').value = "";
+        document.getElementById('n2').value = "";
+        document.getElementById('result-display').innerText = "Result: --";
+    }
+</script>
+
+</body>
+</html>
