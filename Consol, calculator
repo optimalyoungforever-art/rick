@@ -1,120 +1,148 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Modern Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Calculator</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        
-        .calculator {
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 320px;
+        :root {
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --btn-hover: rgba(255, 255, 255, 0.1);
+            --op-color: #fbbf24;
         }
 
-        h2 { text-align: center; color: #333; margin-bottom: 1.5rem; }
-        input, select {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calc-wrapper {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 340px;
+        }
+
+        #display {
             width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1.5px solid #d1d8e0;
-            border-radius: 6px;
-            font-size: 1rem;
+            height: 80px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            text-align: right;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            padding: 10px;
+            outline: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
         }
 
         button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
+            height: 60px;
+            border-radius: 16px;
             border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        button:hover { background-color: #0056b3; }
-        .clear-btn { background-color: #6c757d; margin-top: 5px; }
-        .clear-btn:hover { background-color: #5a6268; }
-
-        #result-display {
-            margin-top: 1.5rem;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            text-align: center;
+            background: var(--btn-hover);
+            color: var(--text);
             font-size: 1.2rem;
-            font-weight: bold;
-            color: #2d3436;
-            border: 1px dashed #ced4da;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        button:active { transform: translateY(0); }
+
+        .operator { color: var(--op-color); font-size: 1.5rem; }
+        
+        .equals { 
+            background: var(--accent); 
+            color: var(--bg); 
+            grid-column: span 2; 
+        }
+        
+        .equals:hover { background: #fff; }
+
+        .clear { color: #f87171; }
     </style>
 </head>
 <body>
 
-<div class="calculator">
-    <h2>Calculator</h2>
-    <input type="number" id="n1" placeholder="First Number" step="any">
-    <select id="op">
-        <option value="+">Add (+)</option>
-        <option value="-">Subtract (-)</option>
-        <option value="*">Multiply (*)</option>
-        <option value="/">Divide (/)</option>
-    </select>
-    <input type="number" id="n2" placeholder="Second Number" step="any">
+<div class="calc-wrapper">
+    <input type="text" id="display" placeholder="0" readonly>
     
-    <button onclick="calculate()">Calculate</button>
-    <button class="clear-btn" onclick="clearAll()">Clear</button>
-
-    <div id="result-display">Result: --</div>
+    <div class="grid">
+        <button class="clear" onclick="clearDisplay()">AC</button>
+        <button onclick="deleteLast()">DEL</button>
+        <button class="operator" onclick="appendChar('%')">%</button>
+        <button class="operator" onclick="appendChar('/')">÷</button>
+        
+        <button onclick="appendChar('7')">7</button>
+        <button onclick="appendChar('8')">8</button>
+        <button onclick="appendChar('9')">9</button>
+        <button class="operator" onclick="appendChar('*')">×</button>
+        
+        <button onclick="appendChar('4')">4</button>
+        <button onclick="appendChar('5')">5</button>
+        <button onclick="appendChar('6')">6</button>
+        <button class="operator" onclick="appendChar('-')">−</button>
+        
+        <button onclick="appendChar('1')">1</button>
+        <button onclick="appendChar('2')">2</button>
+        <button onclick="appendChar('3')">3</button>
+        <button class="operator" onclick="appendChar('+')">+</button>
+        
+        <button onclick="appendChar('0')">0</button>
+        <button onclick="appendChar('.')">.</button>
+        <button class="equals" onclick="calculate()">=</button>
+    </div>
 </div>
 
 <script>
-    function calculate() {
-        // 1. Grab values
-        const val1 = document.getElementById('n1').value;
-        const val2 = document.getElementById('n2').value;
-        const operator = document.getElementById('op').value;
-        const display = document.getElementById('result-display');
+    const display = document.getElementById('display');
 
-        // 2. Validation: Check if inputs are empty
-        if (val1 === "" || val2 === "") {
-            display.innerText = "⚠️ Enter both numbers";
-            display.style.color = "#d63031";
-            return;
-        }
-
-        const num1 = parseFloat(val1);
-        const num2 = parseFloat(val2);
-        let finalResult = 0;
-
-        // 3. Logic
-        switch (operator) {
-            case '+': finalResult = num1 + num2; break;
-            case '-': finalResult = num1 - num2; break;
-            case '*': finalResult = num1 * num2; break;
-            case '/': 
-                finalResult = (num2 !== 0) ? (num1 / num2) : "Divide by Zero Error";
-                break;
-            default: finalResult = "Unknown Error";
-        }
-
-        // 4. Output
-        display.innerText = "Result: " + (typeof finalResult === 'number' ? finalResult.toLocaleString() : finalResult);
-        display.style.color = "#2d3436";
+    function appendChar(char) {
+        if (display.value === "Error") clearDisplay();
+        display.value += char;
     }
 
-    function clearAll() {
-        document.getElementById('n1').value = "";
-        document.getElementById('n2').value = "";
-        document.getElementById('result-display').innerText = "Result: --";
+    function clearDisplay() {
+        display.value = "";
+    }
+
+    function deleteLast() {
+        display.value = display.value.slice(0, -1);
+    }
+
+    function calculate() {
+        try {
+            // Eval is used here for simplicity in a UI demo.
+            // In production, a dedicated math parser is safer.
+            let result = eval(display.value);
+            display.value = Number.isInteger(result) ? result : result.toFixed(4).replace(/\.?0+$/, "");
+        } catch (e) {
+            display.value = "Error";
+            setTimeout(clearDisplay, 1500);
+        }
     }
 </script>
 
