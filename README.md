@@ -1,130 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Richard | Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richard | Developer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00b894;
+            --dark: #121212;
+            --light: #ffffff;
+            --gray: #f4f4f4;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--gray); color: #333; line-height: 1.6; }
+        nav { background: var(--dark); padding: 20px 10%; display: flex; justify-content: space-between; color: white; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        
+        .hero { 
+            height: 100vh; 
+            background: linear-gradient(135deg, #1f4037, #121212); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            color: white; text-align: center; padding-top: 80px;
+        }
 
-html{
-    scroll-behavior:smooth;
-}
+        /* API Content Styling */
+        #profile-img {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
 
-body{
-    background:#f4f4f4;
-    color:#333;
-}
+        .stats-container {
+            display: flex; gap: 20px; margin-top: 20px;
+        }
 
-/* NAVIGATION */
-nav{
-    background:#111;
-    padding:15px 40px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:fixed;
-    width:100%;
-    top:0;
-    z-index:1000;
-}
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
 
-nav h2{
-    color:#fff;
-}
+        .stat-box span { display: block; font-size: 20px; font-weight: bold; color: var(--primary); }
 
-nav ul{
-    list-style:none;
-    display:flex;
-    gap:20px;
-}
+        .btn {
+            margin-top: 30px; padding: 12px 30px;
+            background: var(--primary); color: white;
+            text-decoration: none; border-radius: 5px; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
 
-nav ul li a{
-    color:#fff;
-    text-decoration:none;
-    font-size:15px;
-    transition:0.3s;
-}
+    <nav>
+        <h2>RICHARD</h2>
+    </nav>
 
-nav ul li a:hover{
-    color:#00b894;
-}
+    <section class="hero">
+        <img id="profile-img" src="https://via.placeholder.com/150" alt="Loading...">
+        <h1 id="github-name">Loading...</h1>
+        <p id="github-bio">Fetching developer data from GitHub...</p>
 
-/* HERO SECTION */
-.hero{
-    height:100vh;
-    background:linear-gradient(135deg,#1f4037,#99f2c8);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-    color:white;
-}
+        <div class="stats-container">
+            <div class="stat-box"><span id="repo-count">0</span> Projects</div>
+            <div class="stat-box"><span id="follower-count">0</span> Followers</div>
+        </div>
 
-.hero-content img{
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    object-fit:cover;
-    border:5px solid white;
-    margin-bottom:20px;
-}
+        <a href="#" id="github-link" target="_blank" class="btn">View GitHub Profile</a>
+    </section>
 
-.hero h1{
-    font-size:40px;
-}
+    <script>
+        // REPLACE 'your-github-username' with your actual username
+        const username = 'octocat'; 
 
-.hero p{
-    margin-top:10px;
-    font-size:18px;
-}
+        async function fetchGitHubData() {
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}`);
+                
+                if (!response.ok) throw new Error("User not found");
 
-.btn{
-    margin-top:20px;
-    padding:12px 25px;
-    background:#111;
-    color:white;
-    border:none;
-    border-radius:30px;
-    cursor:pointer;
-    transition:0.3s;
-    text-decoration:none;
-    display:inline-block;
-}
+                const data = await response.json();
 
-.btn:hover{
-    background:#00b894;
-}
+                // DOM Manipulation with API Data
+                document.getElementById('profile-img').src = data.avatar_url;
+                document.getElementById('github-name').innerText = data.name || data.login;
+                document.getElementById('github-bio').innerText = data.bio || "Full Stack Developer";
+                document.getElementById('repo-count').innerText = data.public_repos;
+                document.getElementById('follower-count').innerText = data.followers;
+                document.getElementById('github-link').href = data.html_url;
 
-/* SECTION */
-section{
-    padding:80px 40px;
-    max-width:1000px;
-    margin:auto;
-}
+            } catch (error) {
+                console.error("Error fetching API:", error);
+                document.getElementById('github-name').innerText = "Developer Profile";
+            }
+        }
 
-section h2{
-    text-align:center;
-    margin-bottom:40px;
-    font-size:28px;
-    color:#1f4037;
-}
+        // Initialize API Call
+        fetchGitHubData();
+    </script>
+</body>
+</html>
 
-/* ABOUT */
-.about p{
-    text-align:center;
-    max-width:700px;
-    margin:auto;
-    line-height:1.6;
-}
-
-/* SKILLS */
-.skills-container{
-    display
