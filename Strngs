@@ -1,0 +1,57 @@
+/**
+ * UPGRADED: Student Management System
+ * Using ES2022+ Classes, Private Fields, and Destructuring
+ */
+
+class Student {
+    // # defines a private field (cannot be accessed outside the class)
+    #id;
+
+    constructor(name, age, course) {
+        this.name = name;
+        this.age = age;
+        this.course = course;
+        this.#id = Math.floor(Math.random() * 10000);
+    }
+
+    // Getter for age calculation (Logic stays inside the object)
+    get nextYearAge() {
+        return this.age + 1;
+    }
+
+    // Modern Method using Template Literals
+    displayInfo() {
+        console.log(`
+--- Student Profile [#${this.#id}] ---
+Name   : ${this.name}
+Age    : ${this.age} (Next year: ${this.nextYearAge})
+Course : ${this.course}
+---------------------------`);
+    }
+
+    // Static method for looping through any student object
+    static logEntries(studentObj) {
+        console.log("Iterating through Student Properties:");
+        Object.entries(studentObj).forEach(([key, value]) => {
+            console.log(`>> ${key.toUpperCase()}: ${value}`);
+        });
+    }
+}
+
+// 1. Create Instance
+const moses = new Student("Moses", 30, "AI");
+
+// 2. Show Data Type
+console.log(`Data Type: ${typeof moses} (Instance of Student)`);
+
+// 3. Execute Internal Logic
+moses.displayInfo();
+
+// 4. Modern Loop
+Student.logEntries(moses);
+
+/* BONUS: Modern Nullish Coalescing 
+  Check if a grade exists, otherwise return 'N/A'
+*/
+const grade = moses.grade ?? "No grade assigned yet.";
+console.log(`Status: ${grade}`);
