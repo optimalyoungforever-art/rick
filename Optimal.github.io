@@ -1,254 +1,173 @@
-Writing
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Richard | Personal Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richard | Personal Portfolio</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --bg-dark: #121212;
+            --bg-accent: #1e1e1e;
+            --text-light: #ffffff;
+            --transition: 0.3s ease;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    scroll-behavior: smooth;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
 
-body {
-    background: linear-gradient(to right, #1f1f1f, #2c3e50);
-    color: white;
-}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
 
-/* Navigation */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 10%;
-    background: rgba(0,0,0,0.7);
-    position: sticky;
-    top: 0;
-}
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 10%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-nav h1 {
-    font-size: 24px;
-    color: #00d4ff;
-}
+        nav h1 { color: var(--primary); font-size: 1.5rem; }
 
-nav ul {
-    list-style: none;
-    display: flex;
-}
+        nav ul { display: flex; list-style: none; gap: 2rem; }
 
-nav ul li {
-    margin-left: 25px;
-}
+        nav a { text-decoration: none; color: white; transition: var(--transition); font-weight: 500; }
 
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    transition: 0.3s;
-}
+        nav a:hover { color: var(--primary); }
 
-nav ul li a:hover {
-    color: #00d4ff;
-}
+        /* Sections */
+        section { padding: 100px 10%; }
 
-/* Hero Section */
-.hero {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 80px 10%;
-    flex-wrap: wrap;
-}
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            min-height: 80vh;
+        }
 
-.hero img {
-    width: 320px;
-    max-width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    transition: 0.4s;
-}
+        .hero-img {
+            flex: 1;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: var(--transition);
+        }
 
-.hero img:hover {
-    transform: scale(1.05);
-}
+        .hero-img:hover { transform: translateY(-10px); }
 
-.hero-text {
-    max-width: 500px;
-    margin-left: 40px;
-}
+        .hero-text { flex: 1; }
 
-.hero-text h2 {
-    font-size: 36px;
-    margin-bottom: 15px;
-}
+        .hero-text h2 { font-size: 3rem; margin-bottom: 1rem; }
 
-.hero-text span {
-    color: #00d4ff;
-}
+        .hero-text span { color: var(--primary); }
 
-.hero-text p {
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
+        /* Reusable Button */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
 
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    background: #00d4ff;
-    color: black;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s;
-    border: none;
-    cursor: pointer;
-}
+        .btn:hover { background: white; transform: scale(1.05); }
 
-.btn:hover {
-    background: white;
-}
+        /* Motivation Section */
+        .quote-box {
+            background: var(--bg-accent);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
 
-/* Quote Section */
-.quote {
-    padding: 80px 10%;
-    text-align: center;
-    background: #111;
-}
+        #quote { font-size: 1.2rem; font-style: italic; margin: 20px 0; color: #ccc; }
 
-.quote h2 {
-    color: #00d4ff;
-    margin-bottom: 20px;
-}
+        /* Footer */
+        footer { padding: 40px; text-align: center; background: #000; color: #666; font-size: 0.9rem; }
 
-#quote {
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-/* About Section */
-.about {
-    padding: 80px 10%;
-    text-align: center;
-    background: #1a1a1a;
-}
-
-.about h2 {
-    margin-bottom: 15px;
-    color: #00d4ff;
-}
-
-/* Contact Section */
-.contact {
-    padding: 80px 10%;
-    text-align: center;
-}
-
-.contact a {
-    color: #00d4ff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
-    background: black;
-    font-size: 14px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-    }
-
-    nav ul {
-        margin-top: 10px;
-    }
-
-    .hero {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .hero-text {
-        margin-left: 0;
-        margin-top: 20px;
-    }
-}
-</style>
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 50px; }
+            nav ul { display: none; } /* Consider a mobile menu later */
+        }
+    </style>
 </head>
-
 <body>
 
 <nav>
-    <h1>Richard</h1>
+    <h1>Richard.</h1>
     <ul>
         <li><a href="#">Home</a></li>
-        <li><a href="#quote-section">Motivation</a></li>
+        <li><a href="#motivation">Motivation</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
 </nav>
 
 <section class="hero">
-    <img src="Richard.jpg" alt="Richard">
+    <img src="Richard.jpg" alt="Richard" class="hero-img">
     <div class="hero-text">
         <h2>Hello, I'm <span>Richard</span></h2>
-        <p>
-            Welcome to my personal website. I believe in growth, positivity, and building a strong future.
-            This space represents my journey and vision.
-        </p>
-        <a href="#contact" class="btn">Contact Me</a>
+        <p>I believe in growth, positivity, and building a strong future. This space represents my journey and vision for 2026 and beyond.</p>
+        <br>
+        <a href="#contact" class="btn">Get in Touch</a>
     </div>
 </section>
 
-<section id="quote-section" class="quote">
-    <h2>Daily Motivation</h2>
-    <p id="quote">Click the button to get inspired ✨</p>
-    <button onclick="getQuote()" class="btn">New Quote</button>
+<section id="motivation">
+    <div class="quote-box">
+        <h2 style="color: var(--primary)">Daily Motivation</h2>
+        <p id="quote">"The only way to do great work is to love what you do."</p>
+        <button onclick="getQuote()" class="btn">New Inspiration</button>
+    </div>
 </section>
 
-<section id="about" class="about">
-    <h2>About Me</h2>
-    <p>
-        I am passionate about self-development, creativity, and living life with purpose.
-        My goal is to inspire and grow continuously while connecting with like-minded individuals.
-    </p>
+<section id="about" style="background: var(--bg-accent); text-align: center;">
+    <h2>About My Vision</h2>
+    <p style="max-width: 700px; margin: 20px auto;">I am passionate about self-development and creativity. My goal is to build digital solutions that inspire others to live with purpose.</p>
 </section>
 
-<section id="contact" class="contact">
-    <h2>Contact</h2>
-    <p>Email me at:</p>
-    <p>
-        <a href="mailto:optimalyoungforever@gmail.com">
-            optimalyoungforever@gmail.com
-        </a>
-    </p>
+<section id="contact" style="text-align: center;">
+    <h2>Let's Connect</h2>
+    <p>Reach out for collaborations or just a chat:</p>
+    <br>
+    <a href="mailto:optimalyoungforever@gmail.com" style="color: var(--primary); font-size: 1.2rem; text-decoration: none;">optimalyoungforever@gmail.com</a>
 </section>
 
 <footer>
-    <p>© 2026 Richard | All Rights Reserved</p>
+    <p>&copy; 2026 Richard | Built for the Future</p>
 </footer>
 
 <script>
 async function getQuote() {
-    const quoteText = document.getElementById("quote");
-
-    quoteText.innerHTML = "Loading...";
-
+    const quoteEl = document.getElementById("quote");
+    quoteEl.innerText = "Finding inspiration...";
+    
     try {
-        let response = await fetch("https://api.quotable.io/random");
-        let data = await response.json();
-
-        quoteText.innerHTML = `"${data.content}" <br> — ${data.author}`;
-    } catch (error) {
-        quoteText.innerHTML = "Failed to load quote. Try again.";
+        // Using an alternative reliable API for 2026
+        const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://zenquotes.io/api/random"));
+        const data = await response.json();
+        const quoteData = JSON.parse(data.contents)[0];
+        
+        quoteEl.innerHTML = `"${quoteData.q}" <br><small>— ${quoteData.a}</small>`;
+    } catch (err) {
+        quoteEl.innerText = "Stay positive, work hard, and make it happen!";
     }
 }
 </script>
