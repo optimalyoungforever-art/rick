@@ -1,24 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+// DOM Elements
+const taskInput = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+const taskList = document.getElementById('taskList');
+const clearBtn = document.getElementById('clearBtn');
 
-<div class="container">
-    <h1>My To-Do List</h1>
+// Load tasks when the page opens
+document.addEventListener('DOMContentLoaded', loadTasksFromStorage);
 
-    <input type="text" id="taskInput" placeholder="Add a new task...">
-    <button id="addBtn">Add Task</button>
+// Event: Add Task
+addBtn.addEventListener('click', () => {
+    if (taskInput.value.trim() === "") return;
+    
+    const taskText = taskInput.value;
+    createTaskElement(taskText);
+    saveTaskToStorage(taskText);
+    taskInput.value = '';
+});
 
-    <ul id="taskList"></ul>
+// Event: Clear Completed
+clearBtn.addEventListener('click', () => {
+    const completedTasks = document.querySelectorAll('.completed');
+    completedTasks.forEach(task => task.remove());
+    updateStorageAfterDelete();
+});
 
-    <button id="clearBtn">Clear Completed</button>
-</div>
+// Helper: Create UI Element
+function createTaskElement(text) {
+    const li = document.createElement('li');
+    li.innerText = text;
+    li.addEventListener('click', () => li.classList.toggle('completed'));
+    taskList.appendChild(li);
+}
 
-<script src="app.js"></script>
-</body>
-</html>
+// --- LocalStorage Functions ---
+
+function saveTaskToStorage(task) {
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function loadTasksFromStorage() {
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    tasks.forEach(task => createTaskElement(task));
+}
+
+function updateStorageAfterDelete() {
+    const remainingTasks = [];
+    document.querySelectorAll('#taskList li').forEach(li => {
+        remainingTasks.push(li.innerText);
+    });
+    localStorage.setItem('tasks', JSON.stringify(remainingTasks));
+}
