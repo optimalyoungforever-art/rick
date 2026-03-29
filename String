@@ -1,0 +1,65 @@
+/**
+ * ELITE: Student Management System
+ * Improvements: Data Validation, Setters, and Collection Management
+ */
+
+class Student {
+    #id;
+    #age; // Private age to prevent direct invalid overrides
+
+    constructor(name, age, course) {
+        this.name = name;
+        this.age = age; // Triggers the setter for validation
+        this.course = course;
+        this.#id = crypto.randomUUID().split('-')[0]; // Professional unique ID
+        this.createdAt = new Date().toLocaleDateString();
+    }
+
+    // SETTER: Protects your data from bad inputs
+    set age(value) {
+        if (typeof value !== 'number' || value < 0) {
+            throw new Error("Invalid Age: Must be a positive number.");
+        }
+        this.#age = value;
+    }
+
+    get age() { return this.#age; }
+
+    get nextYearAge() { return this.#age + 1; }
+
+    // IMPROVEMENT: Returns a string instead of just logging (More flexible)
+    getSummary() {
+        return `[${this.#id}] ${this.name} | ${this.course} | Age: ${this.#age}`;
+    }
+
+    // IMPROVEMENT: Allows JSON.stringify to see private fields if needed
+    toJSON() {
+        return {
+            id: this.#id,
+            name: this.name,
+            age: this.#age,
+            course: this.course,
+            enrolled: this.createdAt
+        };
+    }
+}
+
+// --- Management Logic (The "Upgrade") ---
+
+const registry = [
+    new Student("Moses", 30, "AI"),
+    new Student("Sarah", 22, "Web Dev"),
+    new Student("John", 28, "Data Science")
+];
+
+// 1. Bulk Processing with Arrow Functions & Map
+console.log("--- Enrolled Students ---");
+registry.map(s => s.getSummary()).forEach(summary => console.log(summary));
+
+// 2. High-Order Filtering (Find students older than 25)
+const seniors = registry.filter(s => s.age > 25);
+console.log(`\nSeniors found: ${seniors.length}`);
+
+// 3. Modern Spread & JSON Export
+const registryExport = JSON.stringify(registry, null, 2);
+console.log("\nExportable Data Format:", registryExport);
