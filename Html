@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-light: #1e293b;
+            --accent: #38bdf8;
+            --text-main: #ffffff;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .error-container {
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .error-code {
+            font-size: clamp(5rem, 15vw, 8rem);
+            font-weight: 800;
+            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 12px 32px;
+            background-color: var(--accent);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-home:hover {
+            background-color: var(--text-main);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">
+            The page you're looking for has vanished into the digital void.
+        </p>
+        <a href="https://optimalyoungforever-art.github.io/rick/" class="btn-home">
+            Return to Safety
+        </a>
+    </main>
+
+</body>
+</html>
