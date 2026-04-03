@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js WebGPU TSL</title>
+    <style>
+        body { background: #333; margin: 0; overflow: hidden; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://esm.sh/three@latest",
+        "three/webgpu": "https://esm.sh/three@latest/webgpu",
+        "three/tsl": "https://esm.sh/three@latest/tsl",
+        "three/addons/": "https://esm.sh/three@latest/examples/jsm/"
+      }
+    }
+    </script>
+</head>
+<body>
+
+<canvas id="webgpu-canvas"></canvas>
+
+<script type="module">
+    import * as THREE from "three/webgpu";
+    import { 
+        Fn, vec3, float, positionWorld, normalWorld, 
+        time, cameraPosition, dot, normalize 
+    } from "three/tsl";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { ConvexGeometry } from "three/addons/geometries/ConvexGeometry.js";
+
+    async function init() {
+        const canvas = document.querySelector('#webgpu-canvas');
+        
+        // Use WebGPURenderer
+        const renderer = new THREE.WebGPURenderer({ canvas, antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x333333);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(5, 5, 5);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Generate points for Convex Geometry
+        const points = [];
+        for (let i = 0; i < 30; i++) {
+            points.push(new THREE.Vector3(
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3
+            ));
+        }
+        const geometry = new ConvexGeometry(points);
+
+        // TSL Logic - Fixed naming conventions
+        const crystalEffect = Fn(() => {
+            // "posWorld" is now "positionWorld"
+            const viewDir = normalize(cameraPosition.sub(positionWorld));
+            const fresnel = float(1.0).sub(dot(normalWorld, viewDir)).abs();
+            
+            const colorA = vec3(0.0, 0.5, 1.0);
+            const colorB = vec3(1.0, 0.0, 0.5);
+            const mixFactor = time.sin().mul(0.5).add(0.5);
+            
+            return colorA.mix(colorB, mixFactor).mul(fresnel.pow(3.0));
+        });
+
+        const material = new THREE.MeshStandardNodeMaterial({
+            transparent: true,
+            opacity: 0.8,
+            metalness: 1.0,
+            roughness: 0.0
+        });
+        
+        material.emissiveNode = crystalEffect();
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Basic Lighting
+        const sun = new THREE.DirectionalLight(0xffffff, 2);
+        sun.position.set(5, 10, 5);
+        scene.add(sun);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        renderer.setAnimationLoop(() => {
+            controls.update();
+            mesh.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        });
+    }
+
+    init().catch(err => console.error("Initialization failed:", err));
+</script>
+</body>
+</html>
