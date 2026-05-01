@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Order Manager</title>
+    <style>
+        :root { 
+            --primary: #2563eb; 
+            --danger: #dc2626; 
+            --success: #16a34a; 
+            --bg: #f8fafc; 
+            --border: #e2e8f0;
+            --text-h: #1e293b;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            padding: 2rem; 
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container { 
+            background: white; 
+            width: 100%; 
+            max-width: 450px; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+        }
+
+        h2 { 
+            margin-top: 0; 
+            color: var(--text-h); 
+            border-bottom: 2px solid var(--border); 
+            padding-bottom: 0.5rem; 
+        }
+        
+        .form-group { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr 1fr auto; 
+            gap: 8px; 
+            margin-bottom: 1.5rem; 
+        }
+
+        input { 
+            padding: 10px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+
+        button { 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.2s; 
+            border-radius: 6px; 
+            border: none; 
+        }
+        
+        .btn-add { 
+            background: var(--primary); 
+            color: white; 
+            padding: 0 15px; 
+        }
+        
+        .btn-add:hover { 
+            background: #1d4ed8; 
+        }
+
+        .btn-clear { 
+            background: transparent; 
+            color: var(--danger); 
+            width: 100%; 
+            margin-top: 1rem; 
+            padding: 8px; 
+            border: 1px solid var(--danger); 
+        }
+
+        .btn-clear:hover { 
+            background: #fef2f2; 
+        }
+
+        ul { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+        }
+
+        li { 
+            background: #f1f5f9; 
+            margin-bottom: 8px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            animation: fadeIn 0.3s ease; 
+        }
+
+        @keyframes fadeIn { 
+            from { 
+                opacity: 0; 
+                transform: translateY(5px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+
+        .summary { 
+            margin-top: 1.5rem; 
+            padding-top: 1rem; 
+            border-top: 2px dashed var(--border); 
+        }
+
+        .total-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .discount-badge { 
+            background: #dcfce7; 
+            color: var(--success); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            margin-bottom: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Order System</h2>
+    
+    <div class="form-group">
+        <input type="text" id="name" placeholder="Item">
+        <input type="number" id="price" placeholder="$" step="0.01">
+        <input type="number" id="qty" placeholder="Qty" value="1">
+        <button class="btn-add" id="addBtn">Add</button>
+    </div>
+
+    <ul id="itemList"></ul>
+
+    <div class="summary">
+        <div id="discountArea"></div>
+        <div class="total-row">
+            <span>Total Amount:</span>
+            <strong style="font-size: 1.5rem;">$<span id="totalDisplay">0.00</span></strong>
+        </div>
+        <button class="btn-clear" id="clearBtn">Clear Session Storage</button>
+    </div>
+</div>
+
+<script>
+/**
+ * LOGIC MODULE (State & Storage)
+ */
+const STORAGE_KEY = "app_order_state";
+const DISCOUNT_THRESHOLD = 100;
+const DISCOUNT_RATE = 0.9;
+
+let state = {
+    items: JSON.parse(localStorage.getItem(STORAGE_KEY)) || []
+};
+
+const saveState = () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+    render();
+};
+
+const calculateTotal = (items) => {
+    const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const isDiscounted = subtotal > DISCOUNT_THRESHOLD;
+    const finalTotal = isDiscounted ? subtotal * DISCOUNT_RATE : subtotal;
+    
+    return {
+        total: finalTotal.toFixed(2),
+        isDiscounted: isDiscounted
+    };
+};
+
+/**
+ * UI MODULE (DOM Interaction)
+ */
+const render = () => {
+    const list = document.getElementById("itemList");
+    const totalDisplay = document.getElementById("totalDisplay");
+    const discountArea = document.getElementById("discountArea");
+
+    // 1. Render Items
+    list.innerHTML = state.items.map(item => `
+        <li>
+            <div>
+                <strong>${item.name}</strong><br>
+                <small>${item.quantity} x $${item.price.toFixed(2)}</small>
+            </div>
+            <button onclick="deleteItem(${item.id})" style="background:none; border:none; color:#94a3b8; cursor:pointer;">&times;</button>
+        </li>
+    `).join("");
+
+    // 2. Update Totals
+    const result = calculateTotal(state.items);
+    totalDisplay.innerText = result.total;
+    discountArea.innerHTML = result.isDiscounted 
+        ? `<div class="discount-badge">10% Discount Applied</div>` 
+        : "";
+};
+
+const addItem = () => {
+    const nameEl = document.getElementById("name");
+    const priceEl = document.getElementById("price");
+    const qtyEl = document.getElementById("qty");
+
+    const newItem = {
+        id: Date.now(),
+        name: nameEl.value,
+        price: parseFloat(priceEl.value) || 0,
+        quantity: parseInt(qtyEl.value) || 1
+    };
+
+    if (newItem.name && newItem.price > 0) {
+        state.items.push(newItem);
+        nameEl.value = "";
+        priceEl.value = "";
+        qtyEl.value = "1";
+        saveState();
+    }
+};
+
+const deleteItem = (id) => {
+    state.items = state.items.filter(item => item.id !== id);
+    saveState();
+};
+
+const clearAll = () => {
+    state.items = [];
+    saveState();
+};
+
+// Event Listeners
+document.getElementById("addBtn").addEventListener("click", addItem);
+document.getElementById("clearBtn").addEventListener("click", clearAll);
+
+// Initial Render
+render();
+</script>
+</body>
+</html>
