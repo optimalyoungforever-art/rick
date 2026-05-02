@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Practice App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Grade Tracker App</h1>
+    <p>View outputs below or check the console for details:</p>
+
+    <div class="container">
+        <h3>1. Calculator Test Results:</h3>
+        <pre id="calcOutput"></pre>
+    </div>
+
+    <div class="container">
+        <h3>2. Array Operations Results:</h3>
+        <pre id="arrayOutput"></pre>
+    </div>
+
+    <div class="container">
+        <h3>3. Student Report Cards:</h3>
+        <pre id="reportOutput"></pre>
+    </div>
+
+    <script>
+        // --- 1. Math Operations ---
+        function add(a, b) { return a + b; }
+        function subtract(a, b) { return a - b; }
+        function multiply(a, b) { return a * b; }
+        function divide(a, b) {
+            return b === 0 ? "Cannot divide by zero" : a / b;
+        }
+
+        function calculateResult(num1, operator, num2) {
+            switch (operator) {
+                case "+": return add(num1, num2);
+                case "-": return subtract(num1, num2);
+                case "*": return multiply(num1, num2);
+                case "/": return divide(num1, num2);
+                default: return "Invalid operator";
+            }
+        }
+
+        let calcText = `Add: ${calculateResult(10, "+", 5)}
+Subtract: ${calculateResult(10, "-", 5)}
+Multiply: ${calculateResult(10, "*", 5)}
+Divide: ${calculateResult(10, "/", 5)}
+Divide by zero: ${calculateResult(10, "/", 0)}`;
+
+        document.getElementById("calcOutput").innerText = calcText;
+
+        // --- 2. Student Array Operations ---
+        const students = [
+            { name: "Alice", age: 22, grade: 85, major: "CS" },
+            { name: "Bob", age: 20, grade: 72, major: "Math" },
+            { name: "Charlie", age: 23, grade: 90, major: "CS" },
+            { name: "Diana", age: 21, grade: 88, major: "Physics" },
+            { name: "Eve", age: 22, grade: 95, major: "CS" }
+        ];
+
+        let arrayText = `1. All Names: ${JSON.stringify(students.map(s => s.name))}
+2. High Achievers: ${JSON.stringify(students.filter(s => s.grade > 80).map(s => s.name))}
+3. Average Grade: ${(students.reduce((sum, s) => sum + s.grade, 0) / students.length).toFixed(2)}
+4. All Passed: ${students.every(s => s.grade >= 60)}`;
+
+        document.getElementById("arrayOutput").innerText = arrayText;
+
+        // --- 3. Grade Tracker System ---
+        const gradeTracker = {
+            students: [],
+            
+            addStudent(name, grades) {
+                this.students.push({ name, grades });
+            },
+            
+            getStudent(name) {
+                return this.students.find(s => s.name === name) || null;
+            },
+            
+            getStudentAverage(name) {
+                const student = this.getStudent(name);
+                if (!student) return null;
+                const gradesArray = Object.values(student.grades);
+                const sum = gradesArray.reduce((total, score) => total + score, 0);
+                return parseFloat((sum / gradesArray.length).toFixed(2));
+            },
+            
+            getSubjectAverage(subject) {
+                let sum = 0;
+                let count = 0;
+                this.students.forEach(student => {
+                    if (student.grades[subject] !== undefined) {
+                        sum += student.grades[subject];
+                        count++;
+                    }
+                });
+                return count === 0 ? 0 : parseFloat((sum / count).toFixed(2));
+            },
+
+            getStrugglingStudents() {
+                return this.students.filter(student => this.getStudentAverage(student.name) < 70).map(s => s.name);
+            },
+            
+            generateReportCard(name) {
+                const student = this.getStudent(name);
+                if (!student) return `Student ${name} not found.`;
+                return `Name: ${student.name}
+Overall Average: ${this.getStudentAverage(name)}`;
+            }
+        };
+
+        gradeTracker.addStudent("Alice", { math: 95, english: 88, science: 92 });
+        gradeTracker.addStudent("Bob", { math: 72, english: 85, science: 78 });
+        gradeTracker.addStudent("Charlie", { math: 60, english: 65, science: 58 });
+
+        let reportText = `Alice Average: ${gradeTracker.getStudentAverage("Alice")}
+Math Average: ${gradeTracker.getSubjectAverage("math")}
+Struggling: ${gradeTracker.getStrugglingStudents().join(", ")}
+
+Report Card:
+${gradeTracker.generateReportCard("Alice")}`;
+
+        document.getElementById("reportOutput").innerText = reportText;
+    </script>
+</body>
+</html>
